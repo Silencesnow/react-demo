@@ -3,70 +3,41 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-class LoginControl extends React.Component{
+class EssayForm extends React.Component{
     constructor(props){
         super(props);
-        //为了绑定this
-        this.handleLoginClick = this.handleLoginClick.bind(this);
-        this.handleLogoutClick = this.handleLogoutClick.bind(this);
-        //初始化
-        this.state = {isLoggedIn:false}
+        this.state = {
+            value:'Please write an essay about your favorite DOM element.'
+        }
+
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleLoginClick() {
-        this.setState({isLoggedIn:true});
+    handleChange(event){
+        this.setState({value:event.target.value})
     }
-
-    handleLogoutClick() {
-        this.setState({isLoggedIn:false});
+    handleSubmit(event){
+        alert('An essay was submitted:'+this.state.value);
+        event.preventDefault();
     }
 
     render() {
-        const isLoggedIn = this.state.isLoggedIn;
-        let button = null;
-        if(isLoggedIn) {
-            button = <LogoutButton onClick={this.handleLogoutClick}/>
-        }else {
-            button = <LoginButton onClick = {this.handleLoginClick}/>
-        }
         return (
-            <div>
-                <Greeting isLoggedIn={isLoggedIn}/>
-                {button}
-            </div>
+            <form onSubmit={this.handleSubmit}>
+                <label>
+                    Name:
+                    <textarea value={this.state.value} onChange={this.handleChange}/>
+                </label>
+                <input type="submit" value="Submit"/>
+            </form>
         )
     }
 }
 
-function Greeting(props) {
-    const isLoggedIn = props.isLoggedIn;
-    if(isLoggedIn) {
-        return <UserGreeting />
-    }
-    return <GuestGreeting/>
-}
-
-function UserGreeting(props) {
-  return <h1>Welcome back!</h1>;
-}
-
-function GuestGreeting(props) {
-  return <h1>Please sign up.</h1>;
-}
-function LoginButton(props) {
-    return (
-        <button onClick={props.onClick}>Login</button>
-    )
-}
-
-function LogoutButton(props){
-    return (
-        <button onClick={props.onClick}>Logout</button>
-    )
-}
 // ========================================
 
 ReactDOM.render(
-  <LoginControl/>,
+  <EssayForm/>,
   document.getElementById('root')
 );
